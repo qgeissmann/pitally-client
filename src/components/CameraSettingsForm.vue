@@ -11,10 +11,16 @@
         <input type="text" value="my-image" name="prefix">
       </FormItem>
       <FormItem label="Resolution">
-        <select name="resolution"></select>
+        <select name="resolution">
+          <option
+            v-for="resolution in $store.availableResolutions"
+            :key="resolution"
+            :value="resolution"
+          >{{resolution}}</option>
+        </select>
       </FormItem>
       <FormItem label="ISO">
-        <input type="number" value="200" name="iso" min="100" max="800" step="100">
+        <input type="number" name="iso" min="100" max="800" step="100">
       </FormItem>
       <FormItem label="Shutter speed">
         <input
@@ -30,15 +36,7 @@
         <input type="number" value="1" step="0.05" min="0.0" max="8.0" name="awb_gain_r">
       </FormItem>
       <FormItem label="Blue gain">
-        <input
-          type="number"
-          value="1"
-          step="0.05"
-          min="0.0"
-          max="8.0"
-          name="awb_gain_b"
-          id="gain_b"
-        >
+        <input type="number" value="1" step="0.05" min="0.0" max="8.0" name="awb_gain_b">
       </FormItem>
     </div>
   </form>

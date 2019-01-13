@@ -14,7 +14,16 @@ async function captureImage(settings) {
 
 export default new Vue({
   data: () => ({
-    images: []
+    settings: {
+      iso: 200,
+      shutter_speed: 10000,
+      awb_gain_r: 1,
+      awb_gain_b: 1,
+      prefix: "my-image"
+    },
+    images: [],
+    availableResolutions: ["640x480", "1640x1232", "3280x2464"],
+    isPreviewing: false
   }),
   methods: {
     captureImage
