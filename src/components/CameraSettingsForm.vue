@@ -1,43 +1,60 @@
 <template>
   <form @submit.prevent="onSubmit" novalidate role="form" class="form">
-    <div>
-      <button type="submit">Capture</button>
-      <label>
-        <input type="checkbox"> Preview
-      </label>
-    </div>
     <div class="fields">
-      <FormItem label="Prefix">
-        <input type="text" value="my-image" name="prefix">
-      </FormItem>
-      <FormItem label="Resolution">
-        <select name="resolution">
-          <option
-            v-for="resolution in $store.availableResolutions"
-            :key="resolution"
-            :value="resolution"
-          >{{resolution}}</option>
-        </select>
-      </FormItem>
-      <FormItem label="ISO">
-        <input type="number" name="iso" min="100" max="800" step="100">
-      </FormItem>
-      <FormItem label="Shutter speed">
-        <input
-          type="number"
-          value="10000"
-          name="shutter_speed"
-          min="1000"
-          max="10000000"
-          step="100"
-        >
-      </FormItem>
-      <FormItem label="Red gain">
-        <input type="number" value="1" step="0.05" min="0.0" max="8.0" name="awb_gain_r">
-      </FormItem>
-      <FormItem label="Blue gain">
-        <input type="number" value="1" step="0.05" min="0.0" max="8.0" name="awb_gain_b">
-      </FormItem>
+      <v-text-field
+        label="Prefix"
+        placeholder="Type a prefix"
+        type="text"
+        v-model="$store.settings.prefix"
+        name="prefix"
+      />
+      <v-select
+        label="Resolution"
+        name="resolution"
+        :items="$store.availableResolutions"
+        v-model="$store.settings.resolution"
+      ></v-select>
+      <v-text-field
+        label="ISO"
+        placeholder="Type a number"
+        type="number"
+        name="iso"
+        min="100"
+        max="800"
+        step="100"
+        v-model="$store.settings.iso"
+      />
+      <v-text-field
+        label="Shutter speed"
+        placeholder="Type a number"
+        type="number"
+        name="shutter_speed"
+        min="1000"
+        max="10000000"
+        step="100"
+        v-model="$store.settings.shutter_speed"
+      />
+
+      <v-text-field
+        label="Red gain"
+        placeholder="Type a number"
+        type="number"
+        step="0.05"
+        min="0.0"
+        max="8.0"
+        name="awb_gain_r"
+        v-model="$store.settings.awb_gain_r"
+      />
+      <v-text-field
+        label="Blue gain"
+        placeholder="Type a number"
+        type="number"
+        step="0.05"
+        min="0.0"
+        max="8.0"
+        name="awb_gain_b"
+        v-model="$store.settings.awb_gain_b"
+      />
     </div>
   </form>
 </template>
@@ -54,7 +71,7 @@ export default {
 <style scoped>
 .fields {
   display: grid;
-  grid-gap: 1.2rem;
+  grid-gap: 0.5rem;
 }
 </style>
 
