@@ -11,6 +11,9 @@
         <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
       </td>
       <td>{{ props.item.filename }}</td>
+      <td>
+        <img :src="props.item.image" width="100">
+      </td>
     </template>
   </v-data-table>
 </template>

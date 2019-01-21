@@ -15,7 +15,8 @@
           <v-switch v-model="$store.isPreviewing" label="Preview"></v-switch>
         </div>
       </div>
-      <pre>{{ $store.$data }}</pre>
+      <img :src="$store.images.length && $store.images[0].image" alt>
+      <pre class="absolute z-2 top-0">{{ $store.$data }}</pre>
     </div>
 
     <div class="settings bg-white relative z-1 shadow-1">
@@ -30,6 +31,8 @@
             </div>-->
             <p v-if="!$store.images.length">You don't have any image for now</p>
             <div v-else>
+              <v-btn @click="removeImages">Delete</v-btn>
+              <v-btn>Download</v-btn>
               <ImagesTable/>
             </div>
           </div>
@@ -48,7 +51,7 @@
 import CameraSettingsForm from '../CameraSettingsForm'
 import ImagesTable from '../ImagesTable'
 export default {
-  name: 'IndexRoute',
+  name: 'PhotoRoute',
   components: {
     CameraSettingsForm,
     ImagesTable,
@@ -56,6 +59,11 @@ export default {
   data: () => ({
 
   }),
+  methods: {
+    removeImages() {
+      this.$store.removeImages(this.$store.selectedImgs)
+    }
+  }
 }
 </script>
 <style scoped>

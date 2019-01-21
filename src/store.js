@@ -41,6 +41,13 @@ export default new Vue({
       } finally {
         this.loadings.isCapturingImg = false;
       }
+    },
+    removeImages(imgs) {
+      for (const img of imgs) {
+        const index = this.images.findIndex(_img => _img === img);
+        Vue.delete(this.images, index);
+      }
+      this.selectedImgs = [];
     }
   },
   computed: {
@@ -61,7 +68,11 @@ export default new Vue({
 if (process.env.VUE_APP_MOCK) {
   const createResp = () =>
     new Promise(resolve => {
-      setTimeout(() => resolve({ image: "", prefix: "" }), 1000);
+      setTimeout(
+        () =>
+          resolve({ image: "https://via.placeholder.com/640x480", prefix: "" }),
+        1000
+      );
     });
   httpClient.interceptors.response.use(
     function(response) {
