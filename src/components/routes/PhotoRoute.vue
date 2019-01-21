@@ -4,6 +4,7 @@
       <div class="absolute right-0 ma3">
         <v-btn
           :disabled="$store.isPreviewing"
+          :loading="$store.loadings.isCapturingImg"
           type="submit"
           color="primary"
           @click="$store.captureImage"

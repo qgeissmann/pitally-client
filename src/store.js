@@ -17,6 +17,9 @@ export default new Vue({
       prefix: "my-image"
     },
     images: [],
+    loadings: {
+      isCapturingImg: false
+    },
     selectedImgs: [],
     availableResolutions: ["640x480", "1640x1232", "3280x2464"],
     previewResolution: "640x480",
@@ -25,14 +28,19 @@ export default new Vue({
   methods: {
     async captureImage(settings) {
       const timestamp = dayjs().toJSON();
-      const { prefix, image } = await httpClient.post("/capture/1", settings);
-      const newImage = {
-        filename: `${prefix}_${timestamp}.jpg`,
-        image,
-        selected: true
-      };
-      this.images.push(newImage);
-      return newImage;
+      this.loadings.isCapturingImg = true;
+      try {
+        const { prefix, image } = await httpClient.post("/capture/1", settings);
+        const newImage = {
+          filename: `${prefix}_${timestamp}.jpg`,
+          image,
+          selected: true
+        };
+        this.images.push(newImage);
+        return newImage;
+      } finally {
+        this.loadings.isCapturingImg = false;
+      }
     }
   },
   computed: {
@@ -50,15 +58,19 @@ export default new Vue({
 });
 
 // DeV test
-if (process.env.MOCK) {
+if (process.env.VUE_APP_MOCK) {
+  const createResp = () =>
+    new Promise(resolve => {
+      setTimeout(() => resolve({ image: "", prefix: "" }), 1000);
+    });
   httpClient.interceptors.response.use(
     function(response) {
       // Do something with response data
-      return { image: "", prefix: "" };
+      return createResp();
     },
     function(error) {
       // Do something with response error
-      return { image: "", prefix: "" };
+      return createResp();
     }
   );
 }
