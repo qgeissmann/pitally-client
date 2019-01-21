@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import Vue from "vue";
 
 const httpClient = axios.create({
-  baseURL: "https://api.example.com"
+  baseURL: process.env.NODE_ENV === "development" ? "localhost:5000" : "/"
 });
 
 export default new Vue({
@@ -37,7 +37,7 @@ export default new Vue({
 });
 
 // DeV test
-if (process.env.NODE_ENV === "development") {
+if (process.env.MOCK) {
   httpClient.interceptors.response.use(
     function(response) {
       // Do something with response data

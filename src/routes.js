@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import IndexRoute from "@/components/routes/IndexRoute";
+import PhotoRoute from "@/components/routes/PhotoRoute";
 
 Vue.use(Router);
 
@@ -9,7 +10,13 @@ export default new Router({
     {
       path: "",
       name: "index",
-      component: IndexRoute
+      component: IndexRoute,
+      redirect: "/photo"
+    },
+    {
+      path: "/photo",
+      name: "photo",
+      component: PhotoRoute
     }
   ]
 });

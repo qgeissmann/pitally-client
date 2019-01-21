@@ -23,6 +23,7 @@ Vue.component("FormItem", FormItem);
 Vue.use(_Vue => {
   _Vue.prototype.$store = store;
 });
+
 new Vue({
   router,
   render: h => h(App)
