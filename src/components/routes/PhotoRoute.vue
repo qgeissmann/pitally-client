@@ -1,7 +1,7 @@
 <template>
   <div class>
     <div class="preview fixed absolute--fill bg-light-gray w-50">
-      <div class="absolute right-0 ma3">
+      <div class="absolute right-0 ma3 z-5">
         <v-btn
           :disabled="$store.isPreviewing"
           :loading="$store.loadings.isCapturingImg"
@@ -15,7 +15,8 @@
           <v-switch v-model="$store.isPreviewing" label="Preview"></v-switch>
         </div>
       </div>
-      <img :src="$store.images.length && $store.images[0].image" alt>
+      <img v-show="$store.isPreviewing" v-if="$store.previewImg" :src="$store.previewImg.image" alt>
+      <img v-show="!$store.isPreviewing" :src="$store.images.length && $store.images[0].image" alt>
       <pre class="absolute z-2 top-0">{{ $store.$data }}</pre>
     </div>
 

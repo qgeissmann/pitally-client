@@ -16,6 +16,7 @@ export default new Vue({
       awb_gain_b: 1,
       prefix: "my-image"
     },
+    previewImg: null,
     images: [],
     loadings: {
       isCapturingImg: false
@@ -26,21 +27,34 @@ export default new Vue({
     isPreviewing: false
   }),
   methods: {
-    async captureImage(settings) {
+    async captureImage(_settings) {
+      const settings = _settings || this.settings;
       const timestamp = dayjs().toJSON();
       this.loadings.isCapturingImg = true;
       try {
         const { prefix, image } = await httpClient.post("/capture/1", settings);
         const newImage = {
+          timestamp,
           filename: `${prefix}_${timestamp}.jpg`,
           image,
           selected: true
         };
-        this.images.push(newImage);
+        this.images.unshift(newImage);
         return newImage;
       } finally {
         this.loadings.isCapturingImg = false;
       }
+    },
+    async previewImage(_settings) {
+      const settings = _settings || this.settings;
+      const { image } = await httpClient.post("/capture/1", settings);
+      const timestamp = dayjs().toJSON();
+      const newImage = {
+        timestamp,
+        image
+      };
+      this.previewImg = newImage;
+      return newImage;
     },
     removeImages(imgs) {
       for (const img of imgs) {
@@ -48,6 +62,17 @@ export default new Vue({
         Vue.delete(this.images, index);
       }
       this.selectedImgs = [];
+    }
+  },
+  watch: {
+    isPreviewing(val) {
+      const previewRecursive = async () => {
+        await this.previewImage();
+        if (this.isPreviewing) previewRecursive();
+      };
+      if (val) {
+        previewRecursive();
+      }
     }
   },
   computed: {
@@ -70,7 +95,11 @@ if (process.env.VUE_APP_MOCK) {
     new Promise(resolve => {
       setTimeout(
         () =>
-          resolve({ image: "https://via.placeholder.com/640x480", prefix: "" }),
+          resolve({
+            image:
+              "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAIAAADTED8xAAADMElEQVR4nOzVwQnAIBQFQYXff81RUkQCOyDj1YOPnbXWPmeTRef+/3O/OyBjzh3CD95BfqICMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMK0CMO0TAAD//2Anhf4QtqobAAAAAElFTkSuQmCC",
+            prefix: ""
+          }),
         1000
       );
     });
