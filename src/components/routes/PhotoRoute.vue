@@ -2,7 +2,12 @@
   <div class>
     <div class="preview fixed absolute--fill bg-light-gray w-50">
       <div class="absolute right-0 ma3">
-        <v-btn type="submit" color="primary" @click="$store.captureImage">
+        <v-btn
+          :disabled="$store.isPreviewing"
+          type="submit"
+          color="primary"
+          @click="$store.captureImage"
+        >
           <v-icon left>photo_camera</v-icon>Capture
         </v-btn>
         <div>

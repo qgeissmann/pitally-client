@@ -19,6 +19,7 @@ export default new Vue({
     images: [],
     selectedImgs: [],
     availableResolutions: ["640x480", "1640x1232", "3280x2464"],
+    previewResolution: "640x480",
     isPreviewing: false
   }),
   methods: {
@@ -32,6 +33,18 @@ export default new Vue({
       };
       this.images.push(newImage);
       return newImage;
+    }
+  },
+  computed: {
+    currentResolution: {
+      get() {
+        return this.isPreviewing
+          ? this.previewResolution
+          : this.settings.resolution;
+      },
+      set(val) {
+        this.settings.resolution = val;
+      }
     }
   }
 });

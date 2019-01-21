@@ -5,14 +5,16 @@
         label="Prefix"
         placeholder="Type a prefix"
         type="text"
+        :disabled="$store.isPreviewing"
         v-model="$store.settings.prefix"
         name="prefix"
       />
       <v-select
         label="Resolution"
         name="resolution"
+        :disabled="$store.isPreviewing"
         :items="$store.availableResolutions"
-        v-model="$store.settings.resolution"
+        v-model="$store.currentResolution"
       ></v-select>
       <v-text-field
         label="ISO"
