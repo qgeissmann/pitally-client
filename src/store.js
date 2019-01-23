@@ -24,9 +24,17 @@ export default new Vue({
     selectedImgs: [],
     availableResolutions: ["640x480", "1640x1232", "3280x2464"],
     previewResolution: "640x480",
-    isPreviewing: false
+    isPreviewing: false,
+    deviceList: []
   }),
   methods: {
+
+    async listDevices() {
+      const response = httpClient.get("/list_devices").then(
+        response => {
+          this.deviceList=response.data;
+        });
+    },
 
     async captureImage(e, _settings) {
       const settings = _settings || this.postCaptureData;

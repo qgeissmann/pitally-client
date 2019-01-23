@@ -1,17 +1,26 @@
 <template>
+  <div class>
+   
   <div class="pa4">
-    <ul>
-      <li>
-        <a href>Pitally-1</a>
-      </li>
-    </ul>
+  <v-btn
+        type="submit"
+        color="primary"
+        @click="$store.listDevices"
+      >
+        <v-icon left>photo_camera</v-icon>Map
+      </v-btn>
+  <DeviceTable/>
   </div>
+   </div>
+
 </template>
 
 <script>
+import DeviceTable from '../DeviceTable'
 export default {
   name: 'IndexRoute',
   components: {
+    DeviceTable
   },
   data: () => ({
 
