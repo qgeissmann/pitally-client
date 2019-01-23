@@ -11,7 +11,6 @@ export default new Router({
       path: "",
       name: "index",
       component: IndexRoute,
-      redirect: "/photo"
     },
     {
       path: "/photo",

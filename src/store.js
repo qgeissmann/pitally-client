@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import Vue from "vue";
 
 const httpClient = axios.create({
-  baseURL: process.env.NODE_ENV === "development" ? "localhost:5000" : "/"
+  baseURL: process.env.NODE_ENV === "development" ? "http://localhost:5000" : "/"
 });
 
 export default new Vue({
@@ -27,10 +27,12 @@ export default new Vue({
     isPreviewing: false
   }),
   methods: {
-    async captureImage(_settings) {
-      const settings = _settings || this.settings;
+
+    async captureImage(e, _settings) {
+      const settings = _settings || this.postCaptureData;
       const timestamp = dayjs().toJSON();
       this.loadings.isCapturingImg = true;
+
       try {
         const { prefix, image } = await httpClient.post("/capture/1", settings);
         const newImage = {
@@ -46,15 +48,19 @@ export default new Vue({
       }
     },
     async previewImage(_settings) {
-      const settings = _settings || this.settings;
-      const { image } = await httpClient.post("/capture/1", settings);
+      const settings = _settings || this.postCaptureData;
       const timestamp = dayjs().toJSON();
-      const newImage = {
-        timestamp,
-        image
-      };
-      this.previewImg = newImage;
-      return newImage;
+      await httpClient.post("/capture/1", settings).then(
+        response => {
+          const newImage = {
+            image: response.data.image,
+            timestamp,
+          };
+          console.log(newImage);
+          this.previewImg = newImage;
+          
+        }
+      )
     },
     removeImages(imgs) {
       for (const img of imgs) {
@@ -76,6 +82,15 @@ export default new Vue({
     }
   },
   computed: {
+    postCaptureData: { 
+      get () {
+        const res = this.settings.resolution.split("x");
+        const out = this.settings;
+        out['w'] = res[0];
+        out['h'] = res[1];
+        return(out)
+      }
+    } ,
     currentResolution: {
       get() {
         return this.isPreviewing
