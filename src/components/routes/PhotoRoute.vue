@@ -2,8 +2,14 @@
   <div class>
     <div class="preview fixed absolute--fill bg-light-gray w-50">
       <div class="absolute right-0 ma3 z-5">
+<!-- TODO warning messaged, add a class+some css or something -->
+        <p :hidden="$store.deviceInfo.status!='unreachable'"> This device appears unreachable. 
+          If this problem persist, try rebooting it or fixing its connection.</p>
+
+        <p :hidden="$store.deviceInfo.status!='recording'"> This device is curently recording a video. 
+          You need to <a href="/#/video">stop the video</a> before taking any still picture.</p>
         <v-btn
-          :disabled="$store.isPreviewing"
+          :disabled="$store.isPreviewing || $store.deviceInfo.status != 'idle'"
           :loading="$store.loadings.isCapturingImg"
           type="submit"
           color="primary"
@@ -12,7 +18,9 @@
           <v-icon left>photo_camera</v-icon>Capture
         </v-btn>
         <div>
-          <v-switch v-model="$store.isPreviewing" label="Preview"></v-switch>
+          <v-switch 
+          :disabled="$store.loadings.isCapturingImg  || $store.deviceInfo.status != 'idle'"
+          v-model="$store.isPreviewing" label="Preview"></v-switch>
         </div>
       </div>
       <img v-show="$store.isPreviewing" v-if="$store.previewImg" :src="$store.previewImg.image" alt>

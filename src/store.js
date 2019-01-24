@@ -16,18 +16,50 @@ export default new Vue({
       awb_gain_b: 1,
       prefix: "my-image"
     },
+    videoSettings: {
+      prefix: "my-video",
+      resolution: "640x480",
+      bitrate: 2500000,
+      fps:25,
+      duration:-1,
+    },
     previewImg: null,
+    videoPreviewImg: null, 
     images: [],
     loadings: {
       isCapturingImg: false
     },
     selectedImgs: [],
+    availableVideoResolutions: ["640x480", "1640x1232"],
+    currentVideoResolution: "1640x1232",
     availableResolutions: ["640x480", "1640x1232", "3280x2464"],
     previewResolution: "640x480",
     isPreviewing: false,
-    deviceList: []
+    deviceList: [],
+    deviceInfo: {} // device_info = device_info = {"id": MACHINE_ID, "status": "idle", "since": time.time()}
   }),
+  created () {
+    this.updateDeviceInfo()
+    setInterval(this.updateDeviceInfo, 1000);
+    setInterval(this.previewVideo, 1000);
+  },
+  destroyed () {
+    clearInterval(this.updateDeviceInfo);
+    clearInterval(this.previewVideo);
+
+  },
+
   methods: {
+    async updateDeviceInfo() {
+      try{
+        const response = await httpClient.get("/device_info")
+        this.deviceInfo = response.data;
+        }
+      catch(e){
+        console.log("no_info")
+        this.deviceInfo.status="unreachable"
+      }
+    },
 
     async listDevices() {
       const response = httpClient.get("/list_devices").then(
@@ -35,7 +67,40 @@ export default new Vue({
           this.deviceList=response.data;
         });
     },
-
+    async startVideo(e, _settings) {
+      const settings = _settings || this.postVideoData;
+      console.log(this.postVideoData);
+      const timestamp = dayjs().toJSON();
+      await httpClient.post("/start_video", settings).then(
+        response => {
+          this.deviceInfo = response.data;         
+        }
+      )
+    },
+    async stopVideo() {
+      await httpClient.post("/stop_video", {}).then(
+        response => {
+          this.deviceInfo = response.data;         
+        }
+      )
+    },
+    async previewVideo() {
+      if(this.deviceInfo.status != "recording"){
+        return null;
+      }
+        console.log("previewing ")
+      await httpClient.post("/video_preview").then(
+        response => {
+          const newImage = {
+            "image": response.data.image,
+            "videoBasename": response.data.video_name,
+          };
+          console.log(newImage);
+          this.videoPreviewImg = newImage;
+          
+        }
+      )
+    },
     async captureImage(e, _settings) {
       const settings = _settings || this.postCaptureData;
       const timestamp = dayjs().toJSON();
@@ -61,8 +126,8 @@ export default new Vue({
       await httpClient.post("/capture/1", settings).then(
         response => {
           const newImage = {
-            image: response.data.image,
-            timestamp,
+            "image": response.data.image,
+            "timestamp": timestamp,
           };
           console.log(newImage);
           this.previewImg = newImage;
@@ -90,6 +155,16 @@ export default new Vue({
     }
   },
   computed: {
+    postVideoData: { 
+      get () {
+        const res = this.videoSettings.resolution.split("x");
+        const out = this.videoSettings;
+        out['w'] = res[0];
+        out['h'] = res[1];
+        out['time'] = Date.now();
+        return(out)
+      }
+    } ,
     postCaptureData: { 
       get () {
         const res = this.settings.resolution.split("x");

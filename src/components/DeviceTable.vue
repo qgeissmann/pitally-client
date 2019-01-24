@@ -20,7 +20,7 @@
   </v-data-table>
 </template>
 <script>
-export default {
+export default {  
   name: 'DeviceTable',
   data: () => ({
     headers: [
