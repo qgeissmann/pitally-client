@@ -19,9 +19,10 @@
         >
           <v-icon left>stop</v-icon>Stop Video
         </v-btn>
-
+      <p v-if="$store.videoPreviewImg"> {{ $store.videoPreviewImg.videoBasename }} </p>
+      
       </div>
-      <img v-show="$store.deviceInfo.status === 'recording'" :src="$store.videoPreviewImg.image" alt>
+      <img v-show="$store.deviceInfo.status === 'recording'" :src="$store.videoPreviewImg && $store.videoPreviewImg.image" alt>
       <pre class="absolute z-2 top-0">{{ $store.$data }}</pre>
     </div>
 

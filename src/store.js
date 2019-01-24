@@ -70,7 +70,8 @@ export default new Vue({
     async startVideo(e, _settings) {
       const settings = _settings || this.postVideoData;
       console.log(this.postVideoData);
-      const timestamp = dayjs().toJSON();
+      
+      settings['time'] = Date.now();
       await httpClient.post("/start_video", settings).then(
         response => {
           this.deviceInfo = response.data;         
@@ -88,7 +89,7 @@ export default new Vue({
       if(this.deviceInfo.status != "recording"){
         return null;
       }
-        console.log("previewing ")
+        
       await httpClient.post("/video_preview").then(
         response => {
           const newImage = {
@@ -161,7 +162,6 @@ export default new Vue({
         const out = this.videoSettings;
         out['w'] = res[0];
         out['h'] = res[1];
-        out['time'] = Date.now();
         return(out)
       }
     } ,
