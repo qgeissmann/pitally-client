@@ -31,7 +31,6 @@ export default new Vue({
     },
     selectedImgs: [],
     availableVideoResolutions: ["640x480", "1640x1232"],
-    currentVideoResolution: "1640x1232",
     availableResolutions: ["640x480", "1640x1232", "3280x2464"],
     previewResolution: "640x480",
     isPreviewing: false,

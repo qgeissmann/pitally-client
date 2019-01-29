@@ -1,6 +1,7 @@
 <template>
   <div class>
-   <pre class="absolute z-2 top-0">{{ $store.$data }}</pre>
+    
+   <pre  class="absolute z-2 top-0">{{ $store.$data }}</pre>
   <div class="pa4">
   <v-btn
         type="submit"

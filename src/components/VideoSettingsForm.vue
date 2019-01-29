@@ -6,7 +6,7 @@
         placeholder="Type a prefix"
         type="text"
         :disabled="$store.isPreviewing"
-        v-model="$store.settings.prefix"
+        v-model="$store.videoSettings.prefix"
         name="prefix"
       />
       <v-select
@@ -14,7 +14,7 @@
         name="resolution"
         :disabled="$store.isPreviewing"
         :items="$store.availableVideoResolutions"
-        v-model="$store.currentVideoResolution"
+        v-model="$store.videoSettings.resolution"
       ></v-select>
       <v-text-field
         label="FPS (1/s)"
