@@ -11,8 +11,11 @@
         <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
       </td>
       <td>
-        <a :href="'http://' + props.item.hostname" width="100">{{ props.item.hostname }}</a>
+        <a :href="'http://' + props.item.hostname + '.lan'"  width="33">{{ props.item.hostname }} </a>
+        <a :href="'http://' + props.item.hostname + '.lan' + '/#/photo'"  width="33"><v-icon left>photo_camera</v-icon> </a>
+        <a :href="'http://' + props.item.hostname + '.lan' + '/#/video'" width="33"><v-icon left>videocam</v-icon> </a>
       </td>
+
       <td>{{ props.item.ip }}</td>
       <td>{{ props.item.mac }}</td>
     </template>

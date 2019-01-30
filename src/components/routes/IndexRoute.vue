@@ -1,14 +1,13 @@
 <template>
   <div class>
-    
-   <pre  class="absolute z-2 top-0">{{ $store.$data }}</pre>
+   <pre v-if='$store.$data.devMode != "production"' class="absolute z-2 top-0">{{ $store.$data }}</pre>
   <div class="pa4">
   <v-btn
         type="submit"
         color="primary"
         @click="$store.listDevices"
       >
-        <v-icon left>photo_camera</v-icon>Map
+        <v-icon left>refresh</v-icon>Find devices
       </v-btn>
   <DeviceTable/>
   </div>

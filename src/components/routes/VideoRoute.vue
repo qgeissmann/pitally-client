@@ -4,6 +4,7 @@
       <div class="absolute right-0 ma3 z-5">
         <v-btn
           :disabled="$store.deviceInfo.status!='idle'"
+          :loading="$store.loadings.isStartingVideo || $store.loadings.isStoppingVideo"
           type="submit"
           color="primary"
           @click="$store.startVideo"
@@ -13,6 +14,7 @@
         
         <v-btn
           :disabled="$store.deviceInfo.status != 'recording'"
+          :loading="$store.loadings.isStartingVideo || $store.loadings.isStoppingVideo"
           type="submit"
           color="primary"
           @click="$store.stopVideo"
@@ -23,7 +25,7 @@
       
       </div>
       <img v-show="$store.deviceInfo.status === 'recording'" :src="$store.videoPreviewImg && $store.videoPreviewImg.image" alt>
-      <pre class="absolute z-2 top-0">{{ $store.$data }}</pre>
+         <pre v-if='$store.$data.devMode != "production"' class="absolute z-2 top-0">{{ $store.$data }}</pre>
     </div>
 
     <div class="settings bg-white relative z-1 shadow-1">
@@ -55,6 +57,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import VideoSettingsForm from '../VideoSettingsForm'

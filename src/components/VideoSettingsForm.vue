@@ -1,5 +1,7 @@
 <template>
-  <form @submit.prevent="onSubmit" novalidate role="form" class="form">
+  <form 
+          :disabled="$store.deviceInfo.status!='idle'"
+          @submit.prevent="onSubmit" novalidate role="form" class="form">
     <div class="fields">
       <v-text-field
         label="Prefix"

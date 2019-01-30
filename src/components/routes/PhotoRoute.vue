@@ -25,7 +25,7 @@
       </div>
       <img v-show="$store.isPreviewing" v-if="$store.previewImg" :src="$store.previewImg.image" alt>
       <img v-show="!$store.isPreviewing" :src="$store.images.length && $store.images[0].image" alt>
-      <pre class="absolute z-2 top-0">{{ $store.$data }}</pre>
+         <pre v-if='$store.$data.devMode != "production"' class="absolute z-2 top-0">{{ $store.$data }}</pre>
     </div>
 
     <div class="settings bg-white relative z-1 shadow-1">

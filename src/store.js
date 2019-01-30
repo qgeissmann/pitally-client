@@ -8,6 +8,7 @@ const httpClient = axios.create({
 
 export default new Vue({
   data: () => ({
+    devMode: process.env.NODE_ENV,
     settings: {
       iso: 200,
       resolution: "640x480",
@@ -18,7 +19,7 @@ export default new Vue({
     },
     videoSettings: {
       prefix: "my-video",
-      resolution: "640x480",
+      resolution: "1640x1232",
       bitrate: 2500000,
       fps:25,
       duration:-1,
@@ -27,7 +28,9 @@ export default new Vue({
     videoPreviewImg: null, 
     images: [],
     loadings: {
-      isCapturingImg: false
+      isCapturingImg: false,
+      isStartingVideo: false,
+      isStoppingVideo: false
     },
     selectedImgs: [],
     availableVideoResolutions: ["640x480", "1640x1232"],
@@ -71,18 +74,31 @@ export default new Vue({
       console.log(this.postVideoData);
       
       settings['time'] = Date.now();
-      await httpClient.post("/start_video", settings).then(
-        response => {
-          this.deviceInfo = response.data;         
-        }
-      )
+      
+      try{
+        this.loadings.isStartingVideo = true;
+        await httpClient.post("/start_video", settings).then(
+          response => {
+            this.deviceInfo = response.data;         
+          }
+        )
+      }
+      finally{
+        this.loadings.isStartingVideo = false;
+      }
     },
     async stopVideo() {
-      await httpClient.post("/stop_video", {}).then(
-        response => {
-          this.deviceInfo = response.data;         
-        }
-      )
+      try{
+        this.loadings.isStoppingVideo = true;
+        await httpClient.post("/stop_video", {}).then(
+          response => {
+            this.deviceInfo = response.data;         
+          }
+        )
+      }
+      finally{
+        this.loadings.isStoppingVideo = false;
+      }
     },
     async previewVideo() {
       if(this.deviceInfo.status != "recording"){
