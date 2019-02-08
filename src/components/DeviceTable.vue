@@ -8,7 +8,7 @@
   >
     <template slot="items" slot-scope="props">
       <td>
-        <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
+        <v-checkbox v-model="props.item.selected" primary hide-details></v-checkbox>
       </td>
       <td>
         <a :href="'http://' + props.item.hostname + '.lan'"  width="33">{{ props.item.hostname }} </a>
@@ -16,6 +16,8 @@
         <a :href="'http://' + props.item.hostname + '.lan' + '/#/video'" width="33"><v-icon left>videocam</v-icon> </a>
       </td>
 
+      <td>{{ props.item.status }}</td>
+      <td>{{ props.item.software_version }}</td>
       <td>{{ props.item.ip }}</td>
       <td>{{ props.item.mac }}</td>
     </template>
@@ -28,13 +30,15 @@ export default {
   data: () => ({
     headers: [
       { text: 'Name', value: 'hostname'},
+      { text: 'Status', value: 'status'},
+      { text: 'Software version', value: 'software_version'},
       { text: 'IP address', value: 'ip'},
       { text: 'MAC', value: 'mac' },
     ]
   }),
   computed: {
     devicesData() {
-      return this.$store.deviceList
+      return this.$store.deviceList;
     }
   },
 }
