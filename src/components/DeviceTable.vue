@@ -2,7 +2,7 @@
   <v-data-table
     v-model="$store.deviceList"
     :headers="headers"
-    :items="devicesData"
+    :items="$store.deviceList"
     item-key="hostname"
     select-all
   >
@@ -36,11 +36,11 @@ export default {
       { text: 'MAC', value: 'mac' },
     ]
   }),
-  computed: {
-    devicesData() {
-      return this.$store.deviceList;
-    }
-  },
+  // computed: {
+  //   // devicesData() {
+  //   //   return this.$store.deviceList;
+  //   // }
+  // },
 }
 </script>
 <style scoped>

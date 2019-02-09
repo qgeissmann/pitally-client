@@ -58,7 +58,6 @@ export default new Vue({
     async updateDeviceInfo() {
       try{
         const response = await httpClient.get("/device_info");
-        console.log(response);
         this.deviceInfo = response.data;
         }
       catch(e){
@@ -68,22 +67,23 @@ export default new Vue({
     },
 
     async updateAllDevicesInfo() {
+      if(process.env.NODE_ENV === "development"){
+        return null;
+      }
+      if (process.env.VUE_APP_MOCK){
+        return null;
+      } 
+
       for(const i in this.deviceList){
-          if(process.env.NODE_ENV === "development"){
-            return null;
-          }
-          else if (process.env.VUE_APP_MOCK){
-            return null;
-          } 
-
-          const url = this.deviceList[i].url
+        const url = this.deviceList[i].url + "/device_info"
+        if(url){
           axios.get(url).then((response) => {
-            console.log(response) 
-            for(const k in response.data){
-              this.deviceList[i][k] = response.data[k]; 
+            console.log(response.data)
+          for(const k in response.data){
+            this.deviceList[i][k] = response.data[k]; 
             }}
-
-          )
+            )
+          }          
         }
     },
 
