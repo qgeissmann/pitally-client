@@ -36,11 +36,11 @@ export default {
       { text: 'MAC', value: 'mac' },
     ]
   }),
-  // computed: {
-  //   // devicesData() {
-  //   //   return this.$store.deviceList;
-  //   // }
-  // },
+  computed: {
+    devicesData() {
+      return this.$store.deviceList;
+    }
+  },
 }
 </script>
 <style scoped>

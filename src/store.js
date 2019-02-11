@@ -197,10 +197,10 @@ export default new Vue({
     updateUpdateFile(file){
       this.updateFile =  file;
     },
-    uploadUpdateFile(e_, port=8080, route="/update"){
+    uploadUpdateFile(e_, port=8080, route="/"){
       console.log(this.updateFile)
       let formData = new FormData();
-      formData.append('file', this.updateFile);
+      formData.append('package_file', this.updateFile);
       var report = {}
       var promises = []
       var devs = this.selectedDevices;
