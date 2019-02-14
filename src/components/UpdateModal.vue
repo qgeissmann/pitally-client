@@ -24,7 +24,7 @@
     <button class="modal-default-button" @click="$store.$data.modal = null"> 
         Cancel
     </button>
-
+<!-- todo disable if uploadfile ==='' -->
     <button class="modal-default-button" @click="$store.uploadUpdateFile"> 
         Update {{this.$store.selectedDevices.length }} device(s)
     </button>

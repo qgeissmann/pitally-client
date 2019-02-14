@@ -22,7 +22,7 @@
         </v-btn>
         <button id="show-modal" @click="$store.$data.modal = 'update'">Show Modal</button>
         <!-- use the modal component, pass in the prop -->
-          <UpdateModal v-if="$store.$data.modal === 'update'" @close="$store.$data.modal = null"/>
+          <!-- <UpdateModal v-if="$store.$data.modal === 'update'" @close="$store.$data.modal = null"/> -->
   </div>
 
   </div>
@@ -34,13 +34,13 @@
 
 <script>
 import DeviceTable from '../DeviceTable'
-import UpdateModal from '../UpdateModal'
+//import UpdateModal from '../UpdateModal'
 
 export default {
   name: 'IndexRoute',
   components: {
-    DeviceTable,
-    UpdateModal
+    DeviceTable
+    //UpdateModal
   },
   data: () => ({
 

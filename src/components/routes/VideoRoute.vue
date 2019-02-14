@@ -3,7 +3,7 @@
     <div class="preview fixed absolute--fill bg-light-gray w-50">
       <div class="absolute right-0 ma3 z-5">
         <v-btn
-          :disabled="$store.deviceInfo.status!='idle'"
+          :disabled="$store.deviceInfo.status!='idle'"  
           :loading="$store.loadings.isStartingVideo || $store.loadings.isStoppingVideo"
           type="submit"
           color="primary"

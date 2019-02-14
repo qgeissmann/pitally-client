@@ -44,47 +44,67 @@ export default new Vue({
   }),
   created () {
     this.updateDeviceInfo()
-    setInterval(this.updateDeviceInfo, 1000);
-    setInterval(this.updateAllDevicesInfo, 3000);
+    //setInterval(this.updateDeviceInfo, 1000);
+    //setInterval(this.updateAllDevicesInfo, 3000);
+    //setInterval(this.listDevices, 10000);
     setInterval(this.previewVideo, 1000);
   },
   destroyed () {
-    clearInterval(this.updateDeviceInfo);
-    clearInterval(this.updateAllDevicesInfo);
+    //clearInterval(this.updateDeviceInfo);
+    //clearInterval(this.listDevices);
+    //clearInterval(this.updateAllDevicesInfo);
     clearInterval(this.previewVideo);
   },
 
   methods: {
     async updateDeviceInfo() {
+
       try{
         const response = await httpClient.get("/device_info");
         this.deviceInfo = response.data;
         }
       catch(e){
-        console.log("no_info");
         this.deviceInfo.status="unreachable"
       }
     },
 
-    async updateAllDevicesInfo() {
-      if(process.env.NODE_ENV === "development"){
-        return null;
+    async updateAllDevicesInfo(out=null) {
+      if(out === null){
+        out = []
       }
-      if (process.env.VUE_APP_MOCK){
-        return null;
-      } 
+      if(process.env.NODE_ENV != "development" & !process.env.VUE_APP_MOCK ){
 
-      for(const i in this.deviceList){
-        const url = this.deviceList[i].url + "/device_info"
-        if(url){
-          axios.get(url).then((response) => {
-            console.log(response.data)
-          for(const k in response.data){
-            this.deviceList[i][k] = response.data[k]; 
-            }}
-            )
-          }          
+        for(const i in this.deviceList){
+          const url = this.deviceList[i].url + "/device_info"
+          if(this.deviceList[i].hostname === "pitally-drive"){
+            continue
+          } 
+          
+          if(url){
+            axios.get(url).then((response) => {
+              console.log(response.data)
+            for(const k in response.data){
+              this.deviceList[i][k] = response.data[k]; 
+              }}
+              )
+            }          
+          }
         }
+        else{
+          for(const i in this.deviceList){
+          const url = this.deviceList[i].url + "/device_info"
+          if(url){
+              this.deviceList[i].software_version= Math.random()
+            }          
+          }
+        } 
+
+        for(const i in this.deviceList){
+          out.push(this.deviceList[i])
+        }
+        this.deviceList = out
+        
+
     },
 
     async listDevices() {
@@ -98,10 +118,24 @@ export default new Vue({
       else{
         const response = httpClient.get("/list_devices").then(
         response => {
-          this.deviceList=response.data;
-          for(const i in this.deviceList){
-            this.deviceList[i]["selected"]=false;
+          var out = response.data;
+          this.updateAllDevicesInfo(out)
+          for(const i in out){
+            hn = out[i].hostname
+            for(const j in this.deviceList){
+              if(hn == this.deviceList[j].hostname){
+                console.log(hn + this.deviceList[j].selected)
+                if(this.deviceList[j].selected != null){
+                  out[i].selected = this.deviceList[j].selected
+                }
+                else{
+                  out[i].selected = false
+                }
+              }
+            }
           }
+          this.deviceList = out;
+          
         });
       }
     },

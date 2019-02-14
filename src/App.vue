@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-        <v-toolbar>
+        <!-- <v-toolbar>
     <v-toolbar-title>{{ $store.$data.deviceInfo.id }} ({{ $store.$data.deviceInfo.status }})</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
@@ -12,7 +12,7 @@
     </v-toolbar-items>
   <v-toolbar-side-icon></v-toolbar-side-icon>
     
-  </v-toolbar>
+  </v-toolbar> -->
 
       <router-view/>
     </v-app>
