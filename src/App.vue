@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <v-app>
-        <!-- <v-toolbar>
+        <v-toolbar>
     <v-toolbar-title>{{ $store.$data.deviceInfo.id }} ({{ $store.$data.deviceInfo.status }})</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
       <v-btn href='/#/' flat>Devices</v-btn>
-      <v-btn href='/#/photo' flat>Photo</v-btn>
-      <v-btn href='/#/video' flat>Video</v-btn>
-      <v-btn href='/#/manage' flat>Manage</v-btn>
+      <v-btn href='/#/video_lib' flat>Video library</v-btn>
+      <v-btn href='/#/photo_lib' flat>Photo library</v-btn>
+      <!-- <v-btn href='/#/manage' flat>Manage</v-btn> -->
     </v-toolbar-items>
   <v-toolbar-side-icon></v-toolbar-side-icon>
     
-  </v-toolbar> -->
+  </v-toolbar>
 
       <router-view/>
     </v-app>

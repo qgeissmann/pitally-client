@@ -12,6 +12,8 @@
       </td>
       <td>
         <a :href="'http://' + props.item.hostname + '.lan'"  width="33">{{ props.item.hostname }} </a>
+        </td>
+      <td>
         <a :href="'http://' + props.item.hostname + '.lan' + '/#/photo'"  width="33"><v-icon left>photo_camera</v-icon> </a>
         <a :href="'http://' + props.item.hostname + '.lan' + '/#/video'" width="33"><v-icon left>videocam</v-icon> </a>
       </td>
@@ -30,17 +32,13 @@ export default {
   data: () => ({
     headers: [
       { text: 'Name', value: 'hostname'},
+      { text: 'Action', value: 'hostname'},
       { text: 'Status', value: 'status'},
       { text: 'Software version', value: 'software_version'},
       { text: 'IP address', value: 'ip'},
       { text: 'MAC', value: 'mac' },
     ]
   }),
-  computed: {
-    devicesData() {
-      return this.$store.deviceList;
-    }
-  },
 }
 </script>
 <style scoped>

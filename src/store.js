@@ -30,7 +30,8 @@ export default new Vue({
     loadings: {
       isCapturingImg: false,
       isStartingVideo: false,
-      isStoppingVideo: false
+      isStoppingVideo: false,
+      isMakingVideoLib: false
     },
     selectedImgs: [],
     availableVideoResolutions: ["640x480", "1640x1232"],
@@ -41,22 +42,47 @@ export default new Vue({
     deviceInfo: {}, // device_info = device_info = {"id": MACHINE_ID, "status": "idle", "since": time.time()}
     modal: null, // "upload", "video_start","",
     updateFile: '',
+    //
+    videoLibrary: []
   }),
   created () {
     this.updateDeviceInfo()
     //setInterval(this.updateDeviceInfo, 1000);
-    //setInterval(this.updateAllDevicesInfo, 3000);
-    //setInterval(this.listDevices, 10000);
+    setInterval(this.updateAllDevicesInfo, 3000);
+    setInterval(this.listDevices, 10000);
     setInterval(this.previewVideo, 1000);
   },
   destroyed () {
     //clearInterval(this.updateDeviceInfo);
-    //clearInterval(this.listDevices);
-    //clearInterval(this.updateAllDevicesInfo);
+    clearInterval(this.listDevices);
+    clearInterval(this.updateAllDevicesInfo);
     clearInterval(this.previewVideo);
   },
 
   methods: {
+    async makeVideoLibrary(){
+      try{
+        this.loadings.isMakingVideoLib = true
+        var resp = []
+        try{
+          const response = await httpClient.get("/list_video_on_ftp");
+          resp = response.data;
+          }
+        catch(e){
+          resp = []
+        }
+        var lib = []
+        for(const i in resp){
+          var r = resp[i]
+          r["format"] = r.w + "x" + r.h + "@" + r.fps
+          r["link"] = "ftp://pitally-drive/" + r.path
+          lib.push(r)
+        }
+        this.videoLibrary = lib}
+      finally{
+        this.loadings.isMakingVideoLib = false
+      }
+    },
     async updateDeviceInfo() {
 
       try{
@@ -68,47 +94,58 @@ export default new Vue({
       }
     },
 
-    async updateAllDevicesInfo(out=null) {
-      if(out === null){
-        out = []
+    async updateAllDevicesInfo(list = null) {
+      var out = []
+      if(list === null){
+        for(const i in this.deviceList){
+          out.push(this.deviceList[i])
+        }
+      }
+      else{
+        out = list
       }
       if(process.env.NODE_ENV != "development" & !process.env.VUE_APP_MOCK ){
 
-        for(const i in this.deviceList){
-          const url = this.deviceList[i].url + "/device_info"
-          if(this.deviceList[i].hostname === "pitally-drive"){
+        for(const i in out){
+          const url = out[i].url + "/device_info"
+          if(out[i].hostname === "pitally-drive"){
             continue
           } 
           
           if(url){
             axios.get(url).then((response) => {
-              console.log(response.data)
             for(const k in response.data){
-              this.deviceList[i][k] = response.data[k]; 
+              out[i][k] = response.data[k]; 
               }}
               )
             }          
           }
         }
         else{
-          for(const i in this.deviceList){
-          const url = this.deviceList[i].url + "/device_info"
+          for(const i in out){
+          const url = out[i].url + "/device_info"
           if(url){
-              this.deviceList[i].software_version= Math.random()
+              out[i].software_version= Math.random()
             }          
           }
-        } 
-
-        for(const i in this.deviceList){
-          out.push(this.deviceList[i])
         }
-        this.deviceList = out
-        
-
+        // force update of device list
+        if(list === null){
+          this.forceDevListUpdate() 
+        }
+    },
+    
+    forceDevListUpdate(){
+      var  swap = []
+        for(const i in this.deviceList){
+          swap.push(this.deviceList[i])
+        }
+        this.deviceList = swap
     },
 
     async listDevices() {
-      if(process.env.VUE_APP_MOCK){
+      if(process.env.VUE_APP_MOCK === "True"){
+        console.log(process.env.VUE_APP_MOCK)
         this.deviceList  = [
           { hostname: 'pitally-uvwxyz', url: 'http://pitally-uvwxyz.lan' , status: 'idle', ip: '1.2.3.4', selected:false},
           { hostname: 'pitally-fghijk', url: 'http://pitally-fghijk.lan', status: 'idle', ip: '1.2.3.5', selected:false},
@@ -116,25 +153,25 @@ export default new Vue({
         ]
       }
       else{
-        const response = httpClient.get("/list_devices").then(
+        const r = httpClient.get("/list_devices").then(
         response => {
-          var out = response.data;
-          this.updateAllDevicesInfo(out)
-          for(const i in out){
-            hn = out[i].hostname
+          var list_dev = response.data;
+          this.updateAllDevicesInfo(list_dev)
+          for(const i in list_dev){
+            var hn = list_dev[i].hostname
             for(const j in this.deviceList){
               if(hn == this.deviceList[j].hostname){
                 console.log(hn + this.deviceList[j].selected)
                 if(this.deviceList[j].selected != null){
-                  out[i].selected = this.deviceList[j].selected
+                  list_dev[i].selected = this.deviceList[j].selected
                 }
                 else{
-                  out[i].selected = false
+                  list_dev[i].selected = false
                 }
               }
             }
           }
-          this.deviceList = out;
+          this.deviceList = list_dev;
           
         });
       }
