@@ -3,6 +3,7 @@ import Router from "vue-router";
 import IndexRoute from "@/components/routes/IndexRoute";
 // import PhotoRoute from "@/components/routes/PhotoRoute";
 import VideoRoute from "@/components/routes/VideoRoute";
+import VideoLibRoute from "@/components/routes/VideoLibRoute";
 // import Manage from "@/components/routes/Manage";
 
 Vue.use(Router);
