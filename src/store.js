@@ -31,7 +31,8 @@ export default new Vue({
       isCapturingImg: false,
       isStartingVideo: false,
       isStoppingVideo: false,
-      isMakingVideoLib: false
+      isMakingVideoLib: false,
+      isUpdating: false
     },
     selectedImgs: [],
     availableVideoResolutions: ["640x480", "1640x1232"],
@@ -42,7 +43,6 @@ export default new Vue({
     deviceInfo: {}, // device_info = device_info = {"id": MACHINE_ID, "status": "idle", "since": time.time()}
     modal: null, // "upload", "video_start","",
     updateFile: '',
-    //
     videoLibrary: []
   }),
   created () {
@@ -50,12 +50,12 @@ export default new Vue({
     this.updateDeviceInfo();
     //setInterval(this.updateDeviceInfo, 1000);
     setInterval(this.updateAllDevicesInfo, 3000);
-    // setInterval(this.listDevices, 10000);
+    setInterval(this.listDevices, 30000);
     setInterval(this.previewVideo, 1000);
   },
   destroyed () {
     //clearInterval(this.updateDeviceInfo);
-    // clearInterval(this.listDevices);
+    clearInterval(this.listDevices);
     clearInterval(this.updateAllDevicesInfo);
     clearInterval(this.previewVideo);
   },
@@ -96,6 +96,7 @@ export default new Vue({
     },
 
     async updateAllDevicesInfo(list = null) {
+
       var out = []
       if(list === null){
         for(const i in this.deviceList){
@@ -277,10 +278,13 @@ export default new Vue({
       var promises = []
       var devs = this.selectedDevices;
       try{
+        
+          //clearInterval(this.updateAllDevicesInfo);
           for(const i in devs){
             report[devs[i].hostname] = "processing"
             const url = devs[i].url
             const finalUrl = url + ":" + port + route
+            console.log(finalUrl)
             const p = axios.post( finalUrl,
                         formData,
                         {
@@ -289,15 +293,20 @@ export default new Vue({
                           }
                         }).then(function(){
                           report[devs[i].hostname] = "success"
+                          console.log(report);
                         }).catch(function(){
                           report[devs[i].hostname] = "failure"
                           console.log(finalUrl)
+                          console.log(report);
                         })
             promises.push(p)
             }
-            console.log(report);
-            axios.all(promises).then(function(){console.log("all finished")});
-            console.log(report);
+            axios.all(promises).then(function(){
+                console.log("all finished");
+                console.log(report);
+                
+              });
+            
 
       }
       finally{

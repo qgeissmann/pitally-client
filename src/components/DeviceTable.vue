@@ -21,6 +21,7 @@
 
       <td>{{ props.item.status }}</td>
       <td>{{ props.item.software_version }}</td>
+      <td>{{ props.item.percent_disk_use}</td>
       <td>{{ props.item.ip }}</td>
       <td>{{ props.item.mac }}</td>
     </template>
@@ -36,6 +37,7 @@ export default {
       { text: 'Action', value: 'hostname'},
       { text: 'Status', value: 'status'},
       { text: 'Software version', value: 'software_version'},
+      { text: 'Disk space (%)', value: 'percent_disk_use'},
       { text: 'IP address', value: 'ip'},
       { text: 'MAC', value: 'mac' },
     ],
