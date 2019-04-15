@@ -3,6 +3,7 @@
     v-model="$store.deviceList"
     :headers="headers"
     :items="$store.deviceList"
+    :pagination="pagination"
     item-key="hostname"
     select-all
   >
@@ -39,6 +40,13 @@ export default {
       { text: 'MAC', value: 'mac' },
     ]
   }),
+  pagination:{
+    descending: true,
+    page: 1,
+    rowsPerPage: -1,
+    sortBy: "hostname",
+    totalItems: null
+}
 }
 </script>
 <style scoped>
