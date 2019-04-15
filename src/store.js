@@ -46,15 +46,16 @@ export default new Vue({
     videoLibrary: []
   }),
   created () {
-    this.updateDeviceInfo()
+    this.listDevices();
+    this.updateDeviceInfo();
     //setInterval(this.updateDeviceInfo, 1000);
     setInterval(this.updateAllDevicesInfo, 3000);
-    setInterval(this.listDevices, 10000);
+    // setInterval(this.listDevices, 10000);
     setInterval(this.previewVideo, 1000);
   },
   destroyed () {
     //clearInterval(this.updateDeviceInfo);
-    clearInterval(this.listDevices);
+    // clearInterval(this.listDevices);
     clearInterval(this.updateAllDevicesInfo);
     clearInterval(this.previewVideo);
   },
@@ -123,11 +124,11 @@ export default new Vue({
         }
         else{
           for(const i in out){
-          const url = out[i].url + "/device_info"
-          if(url){
-              out[i].software_version= Math.random()
-            }          
-          }
+            const url = out[i].url + "/device_info"
+            if(url){
+                out[i].software_version= Math.random()
+              }          
+            }
         }
         // force update of device list
         if(list === null){

@@ -38,15 +38,15 @@ export default {
       { text: 'Software version', value: 'software_version'},
       { text: 'IP address', value: 'ip'},
       { text: 'MAC', value: 'mac' },
-    ]
-  }),
+    ],
   pagination:{
     descending: true,
     page: 1,
     rowsPerPage: -1,
     sortBy: "hostname",
     totalItems: null
-}
+    }
+  }),
 }
 </script>
 <style scoped>
