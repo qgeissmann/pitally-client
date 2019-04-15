@@ -21,7 +21,7 @@
 
       <td>{{ props.item.status }}</td>
       <td>{{ props.item.software_version }}</td>
-      <td>{{ props.item.percent_disk_use}</td>
+      <td>{{ props.item.percent_disk_use}}</td>
       <td>{{ props.item.ip }}</td>
       <td>{{ props.item.mac }}</td>
     </template>

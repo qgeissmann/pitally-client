@@ -7,11 +7,16 @@
     <p> The selection contains devices that are not idle ({{ nNonIdle }}). 
         Only idle ones can be updated </p>
   </div>
+
   <div v-else>
-    <label>File
-      <input type="file" id="updateFile" ref="updateFile" v-on:change="handleUpdateFileUpload()"/>
-    </label>
-  </div>
+    <div v-if=" this.$store.selectedDevices.length < 1">
+      <p> No device selected. Select device(s) from the table</p>
+    </div>
+    <div v-else>
+      <label>File
+        <input type="file" id="updateFile" ref="updateFile" v-on:change="handleUpdateFileUpload()"/>
+      </label>
+    </div>
 </div>
 
 <div slot="footer">
@@ -53,7 +58,6 @@ export default {
        for (const i in this.$store.selectedDevices){
          console.log(this.$store.selectedDevices[i].status);
          if(this.$store.selectedDevices[i].status != 'idle'){
-           
             out = out + 1;
          }
        }
