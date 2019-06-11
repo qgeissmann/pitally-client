@@ -23,6 +23,9 @@ export default new Vue({
       bitrate: 2500000,
       fps:25,
       duration:-1,
+      start_time:"",
+      clip_duration:300,
+      end_of_clip_hw_class_name: "None"
     },
     previewImg: null,
     videoPreviewImg: null, 
@@ -37,6 +40,7 @@ export default new Vue({
     selectedImgs: [],
     availableVideoResolutions: ["640x480", "1640x1232"],
     availableResolutions: ["640x480", "1640x1232", "3280x2464"],
+    availableHWController: ["None", "y-roulette"], // todo, retreive this from the server!
     previewResolution: "640x480",
     isPreviewing: false,
     deviceList: [],

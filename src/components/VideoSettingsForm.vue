@@ -40,7 +40,7 @@
       />
 
       <v-text-field
-        label="Duration (h)"
+        label="Video duration (h)"
         placeholder="Type a number"
         type="number"
         step="2"
@@ -48,6 +48,35 @@
         name="duration"
         v-model="$store.videoSettings.duration"
       />
+
+      <v-text-field
+        label="Start time"
+        placeholder="YYYY-MM-DD hh:mm:ss"
+        type="text"
+        :disabled="$store.isPreviewing"
+        v-model="$store.videoSettings.start_time"
+        name="start_time"
+      />
+      
+      <v-text-field
+        label="Clip duration (s)"
+        placeholder="Type a number"
+        type="number"
+        name="clip_duration"
+        min="60"
+        max="86400"
+        step="60"
+        v-model="$store.videoSettings.clip_duration"
+      />
+
+      <v-select
+        label="Hardware controller"
+        name="end_of_clip_hw_class_name"
+        :disabled="$store.isPreviewing"
+        :items="$store.availableHWController"
+        v-model="$store.videoSettings.end_of_clip_hw_class_name"
+      ></v-select>
+
     </div>
   </form>
 </template>

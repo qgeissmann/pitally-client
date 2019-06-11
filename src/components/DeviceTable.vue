@@ -37,7 +37,7 @@ export default {
       { text: 'Action', value: 'hostname'},
       { text: 'Status', value: 'status'},
       { text: 'Software version', value: 'software_version'},
-      { text: 'Disk space (%)', value: 'percent_disk_use'},
+      { text: 'Used disk space (%)', value: 'percent_disk_use'},
       { text: 'IP address', value: 'ip'},
       { text: 'MAC', value: 'mac' },
     ],
